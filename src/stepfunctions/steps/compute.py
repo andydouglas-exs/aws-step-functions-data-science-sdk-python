@@ -35,7 +35,10 @@ class LambdaStep(Task):
             result_path (str, optional): Path specifying the raw input’s combination with or replacement by the state’s result. (default: '$')
             output_path (str, optional): Path applied to the state’s output after the application of `result_path`, producing the effective output which serves as the raw input for the next state. (default: '$')
         """
-        if wait_for_callback:
+        resource = kwargs.get("resource")
+        if resource is not None:
+            kwargs[Field.Resource.value] = resource
+        elif wait_for_callback:
             kwargs[Field.Resource.value] = 'arn:aws:states:::lambda:invoke.waitForTaskToken'
         else:
             kwargs[Field.Resource.value] = 'arn:aws:states:::lambda:invoke'
