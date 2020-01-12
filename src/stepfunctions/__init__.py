@@ -24,7 +24,6 @@ logging.getLogger().setLevel(logging.ERROR)
 
 from stepfunctions import steps
 from stepfunctions import workflow
-from stepfunctions import template
 from stepfunctions.workflow.utils import CustomColorFormatter
 
 def set_stream_logger(level=logging.INFO):

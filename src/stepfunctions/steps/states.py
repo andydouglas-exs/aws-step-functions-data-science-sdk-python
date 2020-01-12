@@ -17,7 +17,7 @@ import logging
 
 from stepfunctions.exceptions import DuplicateStatesInChain
 from stepfunctions.steps.fields import Field
-from stepfunctions.inputs import ExecutionInput, StepInput
+from stepfunctions.inputs import ExecutionInput, StepInput, Placeholder
 
 
 logger = logging.getLogger('stepfunctions.states')
@@ -53,8 +53,9 @@ class Block(object):
             return params
         modified_parameters = {}
         for k, v in params.items():
-            if isinstance(v, (ExecutionInput, StepInput)):
-                modified_key = "{key}.$".format(key=k)
+            if isinstance(v, Placeholder):
+                key_suffix = v.get_key_suffix()
+                modified_key = "{key}{key_suffix}".format(key=k, key_suffix=key_suffix)
                 modified_parameters[modified_key] = v.to_jsonpath()
             elif isinstance(v, dict):
                 modified_parameters[k] = self._replace_placeholders(v)
@@ -498,6 +499,7 @@ class Parallel(State):
             Field.Parameters,
             Field.ResultPath,
             Field.Retry,
+            Field.Branches,
             Field.Catch
         ]
 
@@ -694,10 +696,10 @@ class ValidationVisitor(object):
             return
         if not hasattr(state.next_step, 'fields') or Field.Parameters.value not in state.next_step.fields:
             return
-        params = state.next_step.fields[Field.Parameters.value]
-        valid, invalid_param_name = self._validate_next_step_params(params, state.step_output)
-        if not valid:
-            raise ValueError('State \'{state_name}\' is using an illegal placeholder for the \'{param_name}\' parameter.'.format(state_name=state.next_step.state_id, param_name=invalid_param_name))
+        #params = state.next_step.fields[Field.Parameters.value]
+        #valid, invalid_param_name = self._validate_next_step_params(params, state.step_output)
+        #if not valid:
+        #    raise ValueError('State \'{state_name}\' is using an illegal placeholder for the \'{param_name}\' parameter.'.format(state_name=state.next_step.state_id, param_name=invalid_param_name))
 
     def _validate_next_step_params(self, params, step_output):
         for k, v in params.items():

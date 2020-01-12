@@ -63,3 +63,8 @@ class Field(Enum):
     MaxAttempts      = 'max_attempts'
     BackoffRate      = 'backoff_rate'
     NextStep         = 'next_step'
+
+    # Nested Step Function fields
+    Input            = 'input'
+    Name             = 'name'
+    StateMachineArn  = 'state_machine_arn'

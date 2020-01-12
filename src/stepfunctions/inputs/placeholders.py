@@ -232,7 +232,7 @@ class Placeholder(object):
         subscript_list = []
         for i in path:
             if isinstance(i, str):
-                subscript_list.append("['{}']".format(i))
+                subscript_list.append(".{}".format(i))
             elif isinstance(i, int):
                 subscript_list.append('[{}]'.format(i))
         return "".join(subscript_list)
@@ -246,6 +246,8 @@ class Placeholder(object):
         """
         return self.json_str_template.format(self._join_path(self._get_path()))
 
+    def get_key_suffix(self):
+        return ".$"
 
 class ExecutionInput(Placeholder):
 
