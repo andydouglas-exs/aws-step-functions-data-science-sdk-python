@@ -31,7 +31,6 @@ def read_version():
 # Declare minimal set for installation
 required_packages = [
     "boto3>=1.9.213",
-    "sagemaker>=1.42.8"
 ]
 
 # enum is introduced in Python 3.4. Installing enum back port

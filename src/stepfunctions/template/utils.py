@@ -31,7 +31,7 @@ def replace_parameters_with_jsonpath(step, params):
     def replace_values(src_params, dest_params):
         if isinstance(dest_params, dict):
             for key in dest_params.keys():
-                if key.endswith('$'):
+                if key.endswith('.$'):
                     search_and_replace(src_params, dest_params, key)
                 else:
                     replace_values(src_params[key], dest_params[key])
